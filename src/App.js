@@ -14,6 +14,10 @@ import Home from "./Pages/Home";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Notifications from "./Pages/Notifications";
+import Teachers from "./Pages/Teachers";
+import Students from "./Pages/Students";
+import UserInfo from "./Pages/UserInfo";
+import Suggestions from "./Pages/Suggestions";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -29,6 +33,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/teachers" element={<Teachers />} />
+              <Route path="/students" element={<Students />} />
+              <Route path="/user" element={<UserInfo />} />
+              <Route path="/suggestions" element={<Suggestions />} />
               {/* <Route path="/contacts" element={<Contacts />} />
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/form" element={<Form />} />

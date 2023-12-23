@@ -65,16 +65,16 @@ export default function StatsCardComponent({ data }) {
                     <Grid container >
                         <StyledAvatarGroup>
                             <AvatarGroup max={4}>
-                                {[...Array(data.statsCharts[0]?.totalCount || 0)].map((item) => (
-                                    <Avatar alt="React" src="../../public/logo192.png" />
+                                {[...Array(data.statsCharts[0]?.totalCount || 0)].map((item,index) => (
+                                    <Avatar key={index} alt="React" src="../../public/logo192.png" />
                                 ))}
                             </AvatarGroup>
                         </StyledAvatarGroup>
                     </Grid>
 
                     <Grid container sx={{ mt: 2 }}>
-                        {data.statsCharts.map((item) => (
-                            <Grid item sx={{ mt: 2 }} xs={12}>
+                        {data.statsCharts.map((item,index) => (
+                            <Grid key={index} item sx={{ mt: 2 }} xs={12}>
                                 <Grid container>
                                     <Grid item xs={6}>
                                         <Typography variant="h4" sx={{ color: colors.primary[500], fontWeight: 'bold' }} gutterBottom>

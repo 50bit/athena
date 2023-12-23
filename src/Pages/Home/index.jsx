@@ -50,7 +50,7 @@ export default function Home() {
         ]
     }
     return (
-        <Box sx={{ mt: 10 }}>
+        <Box sx={{ mt: 10, mb:2 }}>
             <TopBar />
 
             <Typography variant="h4" sx={{ pr: 1, color: colors.primary[500], fontWeight: 'bold' }}>

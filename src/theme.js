@@ -6,7 +6,7 @@ export const tokens = (mode) => ({
   ...(mode === "dark"
     ? {
         grey: {
-          100: "#e0e0e0",
+          100: "#e4e4e4",
           200: "#c2c2c2",
           300: "#a3a3a3",
           400: "#858585",
@@ -74,7 +74,7 @@ export const tokens = (mode) => ({
           600: "#858585",
           700: "#a3a3a3",
           800: "#c2c2c2",
-          900: "#e0e0e0",
+          900: "#e4e4e4",
         },
         primary: {
           100: "#040509",

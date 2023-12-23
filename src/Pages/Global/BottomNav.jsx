@@ -16,6 +16,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import PortraitIcon from '@mui/icons-material/Portrait';
 import CategoryIcon from '@mui/icons-material/Category';
+import { Link as RouterLink } from 'react-router-dom';
+
 function refreshMessages() {
   const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
 
@@ -45,9 +47,9 @@ export default function BottomNav() {
             setValue(newValue);
           }}
         >
-          <BottomNavigationAction label="الرئيسية" icon={<HomeIcon />} />
-          <BottomNavigationAction label="الطلاب" icon={<PersonIcon />} />
-          <BottomNavigationAction label="الشيوخ" icon={<PortraitIcon />} />
+          <BottomNavigationAction label="الرئيسية" icon={<HomeIcon />} component={RouterLink} to="/" />
+          <BottomNavigationAction label="الطلاب" icon={<PersonIcon />} component={RouterLink} to="/students" />
+          <BottomNavigationAction label="الشيوخ" icon={<PortraitIcon />} component={RouterLink} to="/teachers" />
           <BottomNavigationAction label="الأنشطة" icon={<CategoryIcon />} />
         </BottomNavigation>
       </Paper>
