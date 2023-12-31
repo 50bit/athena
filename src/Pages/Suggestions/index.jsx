@@ -1,14 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
 import { ColorModeContext, tokens } from '../../theme';
 import { useTheme } from '@mui/material';
-import GoBackTopNav from '../Global/GoBackTopNav'
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import GoBackTopNav from '../Global/GoBackTopNav';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -65,7 +60,6 @@ export default function Suggestions() {
                     </TableBody>
                 </Table>
             </TableContainer>
-
         </Box>
     );
 }

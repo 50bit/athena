@@ -1,5 +1,4 @@
 import * as React from 'react';
-import BarChartComponent from '../../Components/BarChart'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { ColorModeContext, tokens } from '../../theme';
@@ -10,12 +9,12 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
-import InfoCard from '../../Components/InfoCard'
+import InfoCard from '../../Components/InfoCard';
+import axiosInstance from '../../axios';
+import _ from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 const options = [
     {
@@ -23,7 +22,7 @@ const options = [
         values: [
             'الطلاب',
             'طلاب الحلقات',
-            'طلاب الإجازات'
+            // 'طلاب الإجازات'
         ]
     },
     {
@@ -39,7 +38,11 @@ export default function Students() {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
-    const studentData = {
+    const [studentData, setStudentData] = React.useState([])
+    const [filteredStudentData, setFilteredStudentData] = React.useState([])
+    const [selectedItems, setSelectedItems] = React.useState([]);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [studentGraphData, setStudentGraphData] = React.useState({
         title: "الطلاب",
         buttonTitle: "رؤية الكل",
         buttonRoute: "/test",
@@ -50,21 +53,76 @@ export default function Students() {
                 totalCountTitle: "كل الطلاب",
                 subCountTitle: "طلاب الحلقات",
                 imageSrc: "../../public/logo192.png",
-                imageAlt: "React"
+                imageAlt: "React",
+                prop: "sessionRate"
             },
-            {
-                totalCount: 846,
-                subCount: 246,
-                totalCountTitle: "كل الطلاب",
-                subCountTitle: "طلاب الإجازات",
-                imageSrc: "../../public/logo192.png",
-                imageAlt: "React"
-            }
+            // {
+            //     totalCount: 846,
+            //     subCount: 246,
+            //     totalCountTitle: "كل الطلاب",
+            //     subCountTitle: "طلاب الإجازات",
+            //     imageSrc: "../../public/logo192.png",
+            //     imageAlt: "React"
+            // }
         ]
+    })
+
+
+
+    const getStudentData = async () => {
+        const { data } = await axiosInstance.get('/users/get_all_students');
+        const sessionStudents = (await axiosInstance.get('/sessions/sessions_students')).data
+        _.forEach(data, (sd) => {
+            const sessionStudent = _.find(sessionStudents, (ss) => ss.student?.id === sd.id)
+            if (!_.isEmpty(sessionStudent))
+                sd['sessionStudent'] = true
+            else
+                sd['sessionStudent'] = false
+        })
+        const totalStudents = data.length || 0
+        const tmpData = JSON.parse(JSON.stringify(studentGraphData))
+        const sessionChartIndex = studentGraphData.statsCharts.findIndex((sd) => sd.prop === "sessionRate")
+        if (sessionChartIndex >= 0) {
+            tmpData.statsCharts[sessionChartIndex].totalCount = totalStudents
+            tmpData.statsCharts[sessionChartIndex].subCount = sessionStudents?.length || 0
+        }
+        setStudentGraphData(tmpData);
+        setStudentData(data);
+        setFilteredStudentData(data);
+
+        if (selectedItems.length > 0)
+            filterData()
     }
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [selectedItems, setSelectedItems] = React.useState([]);
+    const filterData = () => {
+        if (selectedItems.length === 0)
+            setFilteredStudentData(studentData)
+        const genderFilters = _.join(_.map(_.filter(selectedItems, (item) => item === "الذكور" || item === "الإناث"), (gItem) => {
+            if (gItem === "الذكور")
+                return 'sd.gender === "male"'
+            else if (gItem === "الإناث")
+                return 'sd.gender === "female"'
+        }), " || ")
+        const paidFilters = _.join(_.map(_.filter(selectedItems, (item) => item === "الطلاب" || item === "طلاب الحلقات"), (sItem) => {
+            if (sItem === "الطلاب")
+                return '(sd.sessionStudent == true || sd.sessionStudent == false)'
+            else if (sItem === "طلاب الحلقات")
+                return 'sd.sessionStudent == true'
+        }), " || ")
+
+        let filterCondition = _.join(_.map(_.filter([genderFilters, paidFilters], (item) => !_.isEmpty(item)), (filteredItem) => `(${filteredItem})`), ' && ');
+        if (!_.isEmpty(filterCondition))
+            setFilteredStudentData(_.uniqBy(_.filter(studentData, (sd) => eval(filterCondition)), 'id'))
+    }
+
+    React.useEffect(() => {
+        getStudentData();
+    }, [])
+
+    React.useEffect(() => {
+        filterData()
+    }, [JSON.stringify(selectedItems)])
+
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -90,10 +148,18 @@ export default function Students() {
     const clearFilter = () => {
         setSelectedItems([])
     }
+
+    const navigate = useNavigate();
+
+    const gotoInfoCard = (data) => {
+        navigate('/user', {
+            state: data
+        })
+    }
     return (
         <Box sx={{ mt: 10, mb: 2 }}>
-            <TopBar />
-            <StatsCardComponent data={studentData} />
+            <TopBar data={[studentData]} />
+            <StatsCardComponent data={studentGraphData} />
             <Divider variant="middle" sx={{ mt: 3, mb: 3 }} />
             <Grid container rowSpacing={1} pl={2} pr={2} alignItems={'center'}>
                 <Grid item xs={6}>
@@ -137,13 +203,19 @@ export default function Students() {
                                 </Grid>
                             </Grid>
                         ))}
-                        <Typography variant="h4" sx={{ cursor:'pointer', fontSize: 14, color: colors.primary[600], textDecoration: 'none', fontWeight: 'bold', m: '10px 15px', float:'left' }} onClick={clearFilter}>
+                        <Typography variant="h4" sx={{ cursor: 'pointer', fontSize: 14, color: colors.primary[600], textDecoration: 'none', fontWeight: 'bold', m: '10px 15px', float: 'left' }} onClick={clearFilter}>
                             حذف التنقية
                         </Typography>
                     </Menu>
                 </Grid>
             </Grid>
-            <InfoCard data={{}}/>
+            {filteredStudentData.map((student) => {
+                return (
+                    <div style={{ cursor: 'pointer' }} onClick={() => gotoInfoCard(student)}>
+                        <InfoCard infoCardData={student} />
+                    </div>
+                )
+            })}
         </Box>
     )
 }

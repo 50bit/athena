@@ -6,7 +6,7 @@ export const tokens = (mode) => ({
   ...(mode === "dark"
     ? {
         grey: {
-          100: "#e4e4e4",
+          100: "#f2f2f2",
           200: "#c2c2c2",
           300: "#a3a3a3",
           400: "#858585",
@@ -74,7 +74,7 @@ export const tokens = (mode) => ({
           600: "#858585",
           700: "#a3a3a3",
           800: "#c2c2c2",
-          900: "#e4e4e4",
+          900: "#f2f2f2",
         },
         primary: {
           100: "#040509",
@@ -123,6 +123,10 @@ export const tokens = (mode) => ({
         orangeAccent: {
           100: "#f28e2c"
         },
+        gradient:{
+          100: "linear-gradient(90deg, rgba(51,105,143,1) 0%, rgba(3,61,102,1) 100%)",
+          200: "linear-gradient(90deg, rgba(209,209,209,1) 0%, rgba(242,242,242,1) 100%)"
+        }
       }),
 });
 

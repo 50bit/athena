@@ -3,15 +3,7 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArchiveIcon from '@mui/icons-material/Archive';
 import Paper from '@mui/material/Paper';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import PortraitIcon from '@mui/icons-material/Portrait';
@@ -50,7 +42,7 @@ export default function BottomNav() {
           <BottomNavigationAction label="الرئيسية" icon={<HomeIcon />} component={RouterLink} to="/" />
           <BottomNavigationAction label="الطلاب" icon={<PersonIcon />} component={RouterLink} to="/students" />
           <BottomNavigationAction label="الشيوخ" icon={<PortraitIcon />} component={RouterLink} to="/teachers" />
-          <BottomNavigationAction label="الأنشطة" icon={<CategoryIcon />} />
+          <BottomNavigationAction label="الأنشطة" icon={<CategoryIcon />} component={RouterLink} to="/activities" />
         </BottomNavigation>
       </Paper>
     </Box>

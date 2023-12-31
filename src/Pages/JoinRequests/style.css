@@ -1,0 +1,13 @@
+.MuiFormLabel-root {
+    transform: translate(-14px, 16px) scale(1)!important;
+    -moz-transform: translate(-14px, 16px) scale(1)!important;
+    -ms-transform: translate(-14px, 16px) scale(1)!important;
+    right: 0!important;
+    left: 'auto'!important;
+}
+label{
+    margin-right: 15px;
+}
+fieldset{
+    border: none!important;
+}
