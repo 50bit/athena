@@ -1,15 +1,14 @@
 {
-  "homepage": "https://50bit.github.io/athena",
   "name": "athena",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@emotion/react": "^11.11.1",
+    "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/core": "^5.0.0-alpha.54",
     "@mui/icons-material": "^5.15.1",
-    "@mui/material": "^5.15.1",
+    "@mui/material": "^5.15.3",
     "@mui/x-charts": "^6.18.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
