@@ -21,7 +21,7 @@ import { saveAs } from 'file-saver';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 
-const BASE_URL = "http://173.249.60.28:60772";
+const BASE_URL = "https://173.249.60.28:60772";
 
 const StyledTextPaper = styled(Paper)(({ theme, colors }) => ({
     borderRadius: 20,

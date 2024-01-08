@@ -14,7 +14,7 @@ import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import CategoryIcon from '@mui/icons-material/Category';
 import axiosInstance from '../axios';
 import _ from 'lodash'
-const BASE_URL = "http://173.249.60.28:60772";
+const BASE_URL = "https://173.249.60.28:60772";
 
 const trimImagePath = (imagePath) => {
     if(!_.isEmpty(imagePath))
