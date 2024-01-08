@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/athena/static/css/main.841b66af.css",
-    "main.js": "/athena/static/js/main.a784c31d.js",
-    "index.html": "/athena/index.html",
-    "static/media/wave.svg": "/athena/static/media/wave.1d27abfe5f5b13654a83d34e2c354c5c.svg",
-    "main.841b66af.css.map": "/athena/static/css/main.841b66af.css.map",
-    "main.a784c31d.js.map": "/athena/static/js/main.a784c31d.js.map"
+    "main.css": "/static/css/main.841b66af.css",
+    "main.js": "/static/js/main.f4fb2403.js",
+    "index.html": "/index.html",
+    "static/media/wave.svg": "/static/media/wave.1d27abfe5f5b13654a83d34e2c354c5c.svg",
+    "main.841b66af.css.map": "/static/css/main.841b66af.css.map",
+    "main.f4fb2403.js.map": "/static/js/main.f4fb2403.js.map"
   },
   "entrypoints": [
     "static/css/main.841b66af.css",
-    "static/js/main.a784c31d.js"
+    "static/js/main.f4fb2403.js"
   ]
 }
