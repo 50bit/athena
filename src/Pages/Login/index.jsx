@@ -11,6 +11,8 @@ import axiosInstance from '../../axios';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert'
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as LoginSvg } from './login.svg';
+
 const StyledTextField = styled(({ value, setValue, label, field, colors }) => (
     <Grid container>
         <Grid xs={12} columnGap={2}>
@@ -84,8 +86,15 @@ export default function Login() {
     };
     return (
         <Box container sx={{ flexGrow: 1 }}>
-            <div style={{ width: '100%', minHeight: '300px', position: 'relative', backgroundColor: colors.primary[500] }}>
-                <div style={{ width: '100%', position: 'absolute', top: '300px' }}>
+            <div style={{ width: '100%', minHeight: '400px', position: 'relative', backgroundColor: colors.primary[500] }}>
+                <div style={{ textAlign: 'center' }}>
+                    <LoginSvg style={{ width: '400px', height: '270px', paddingTop: '30px' }} />
+                </div>
+                <div style={{marginTop:'30px',marginRight:"25px",color:'#ffff'}}>
+                    <Typography variant="h3" sx={{marginBottom:1}}>أهلا بك من جديد..</Typography>
+                    <Typography variant="body">تابع و راقب التطورات اول بأول</Typography>
+                </div>
+                <div style={{ width: '100%', position: 'absolute', top: '400px' }}>
                     <Wave />
                 </div>
             </div>
