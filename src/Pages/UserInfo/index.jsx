@@ -30,7 +30,7 @@ import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
 import axiosInstance from '../../axios';
 import { saveAs } from 'file-saver';
-const BASE_URL = "https://173.249.60.28:60772";
+const BASE_URL = "http://173.249.60.28:60772";
 
 function createData(id, requiredPaymentDate, paymentDate, paymentStatus) {
     return { id, requiredPaymentDate, paymentDate, paymentStatus };

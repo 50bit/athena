@@ -13,7 +13,7 @@ import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import _ from 'lodash';
-const BASE_URL = "https://173.249.60.28:60772";
+const BASE_URL = "http://173.249.60.28:60772";
 
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, colors }) => ({

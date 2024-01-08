@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/athena/static/css/main.841b66af.css",
-    "main.js": "/athena/static/js/main.fa481e5b.js",
+    "main.js": "/athena/static/js/main.781963fe.js",
     "static/media/login.svg": "/athena/static/media/login.c323a338c25ead961ffa5b38bcac9951.svg",
     "index.html": "/athena/index.html",
     "static/media/wave.svg": "/athena/static/media/wave.1d27abfe5f5b13654a83d34e2c354c5c.svg",
     "main.841b66af.css.map": "/athena/static/css/main.841b66af.css.map",
-    "main.fa481e5b.js.map": "/athena/static/js/main.fa481e5b.js.map"
+    "main.781963fe.js.map": "/athena/static/js/main.781963fe.js.map"
   },
   "entrypoints": [
     "static/css/main.841b66af.css",
-    "static/js/main.fa481e5b.js"
+    "static/js/main.781963fe.js"
   ]
 }

@@ -18,7 +18,7 @@ import _ from 'lodash';
 import Rating from '@mui/material/Rating';
 import { useNavigate } from 'react-router-dom';
 
-const BASE_URL = "https://173.249.60.28:60772";
+const BASE_URL = "http://173.249.60.28:60772";
 
 const Search = styled('div')(({ theme, colors }) => ({
     position: 'relative',
