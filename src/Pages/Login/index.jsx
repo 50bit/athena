@@ -10,6 +10,7 @@ import { ReactComponent as Wave } from './wave.svg';
 import axiosInstance from '../../axios';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert'
+import { useNavigate } from 'react-router-dom';
 const StyledTextField = styled(({ value, setValue, label, field, colors }) => (
     <Grid container>
         <Grid xs={12} columnGap={2}>
@@ -32,10 +33,11 @@ const StyledTextField = styled(({ value, setValue, label, field, colors }) => (
 ))()
 
 export default function Login() {
+    localStorage.clear();
+    const navigate = useNavigate();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
-
     const [value, setValue] = React.useState({
         email: '',
         password: ''
@@ -48,9 +50,10 @@ export default function Login() {
         formData.append('password', value.password);
         try {
             const res = await axiosInstance.post('/authenticate/login', formData)
-            if (res.status == 401) {
+            if (res.status == 401 || (res.roleId !== 1 && res.roleId !== 2)) {
                 setMessage(" البريد الإلكترونى او كلمة المرور غير صحيحين")
                 setIsError(true)
+                return;
             }
             if (res.status == 200) {
                 setMessage(" تم تسجيل الدخول بنجاح")
@@ -58,6 +61,7 @@ export default function Login() {
                 localStorage.setItem('token', res.token)
                 localStorage.setItem('expiration', res.expiration)
                 localStorage.setItem('roleId', res.roleId)
+                navigate("/")
             }
 
             setOpenSnackBar(true)

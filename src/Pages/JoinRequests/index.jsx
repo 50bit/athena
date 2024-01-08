@@ -17,6 +17,11 @@ import axiosInstance from '../../axios';
 import _ from 'lodash';
 import { useLocation } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
+import { saveAs } from 'file-saver';
+import Alert from '@mui/material/Alert';
+import { useNavigate } from 'react-router-dom';
+
+const BASE_URL = "http://173.249.60.28:60772";
 
 const StyledTextPaper = styled(Paper)(({ theme, colors }) => ({
     borderRadius: 20,
@@ -41,6 +46,7 @@ const StyledTextField = styled(({ value, setValue, label, field, colors }) => (
                     setValue(newVal)
                 }}
                 value={value[field]}
+                disabled={true}
             />
         </Grid>
     </Grid>
@@ -48,6 +54,7 @@ const StyledTextField = styled(({ value, setValue, label, field, colors }) => (
 ))()
 
 export default function JoinRequests() {
+    const navigate = useNavigate();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
@@ -75,8 +82,11 @@ export default function JoinRequests() {
 
     const acceptTeacher = async () => {
         const response = await axiosInstance.put(`/users/accept_mohafez/${userData.uId}`);
-        setResult(response.message || '')
+        setResult(response.message == "Mohafez accepted" ? "تم قبول المحفظ" : response.message)
         setOpenSnackBar(true)
+        setTimeout(() => {
+            navigate("/notifications")
+        }, 1000)
     }
 
     const handleCloseSnackBar = (event, reason) => {
@@ -85,10 +95,25 @@ export default function JoinRequests() {
         }
         setOpenSnackBar(false);
     };
+    const [ejazat, setEjazat] = React.useState([])
+
+    const getEjazat = async () => {
+        const { data } = await axiosInstance.get(`/users/ejazat/${userData.uId}`)
+        // const { data } = await axiosInstance.get(`/users/ejazat/d860e743-a80e-491c-83c2-1a646889b4c5`)
+        setEjazat(data)
+    }
 
     React.useEffect(() => {
         setValue({ ...value, ...getuserDataValue() })
+        getEjazat()
     }, [])
+
+    const downloadImage = (path) => {
+        if (path) {
+            const name = path.split("/").slice(-1)
+            saveAs(path, name)
+        }
+    }
 
 
     return (
@@ -123,26 +148,22 @@ export default function JoinRequests() {
                     الإجازات
                 </Typography>
                 <Stack direction="column" m={2} spacing={2}>
-                    <Grid container style={{ backgroundColor: colors.grey[900], borderRadius: 20, padding: 10 }}>
-                        <Grid item xs={6}>
-                            <Typography variant="body1" sx={{ pr: 1, color: colors.primary[500], float: 'right' }}>
-                                إجازة 1
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6} >
-                            <FileDownloadOutlinedIcon sx={{ float: 'left', color: colors.primary[500] }} />
-                        </Grid>
-                    </Grid>
-                    <Grid container style={{ backgroundColor: colors.grey[900], borderRadius: 20, padding: 10 }}>
-                        <Grid item xs={6}>
-                            <Typography variant="body1" sx={{ pr: 1, color: colors.primary[500], float: 'right' }}>
-                                إجازة 2
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6} >
-                            <FileDownloadOutlinedIcon sx={{ float: 'left', color: colors.primary[500] }} />
-                        </Grid>
-                    </Grid>
+                    {
+                        (ejazat.map((ejaza, index) => {
+                            return (
+                                <Grid onClick={(e) => { downloadImage(`${BASE_URL}${ejaza.filePath}`) }} container style={{ backgroundColor: colors.grey[900], borderRadius: 20, padding: 10, cursor: 'pointer' }}>
+                                    <Grid item xs={6}>
+                                        <Typography variant="body1" sx={{ pr: 1, color: colors.primary[500], float: 'right' }}>
+                                            إجازة {index + 1}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={6} >
+                                        <FileDownloadOutlinedIcon sx={{ float: 'left', color: colors.primary[500] }} />
+                                    </Grid>
+                                </Grid>
+                            )
+                        }))
+                    }
                 </Stack>
                 <Typography variant="body2" sx={{ color: colors.primary[500], textAlign: 'start', mr: 5, mt: 3 }} gutterBottom>
                     نبذة عنه
@@ -177,8 +198,9 @@ export default function JoinRequests() {
                 open={openSnackBar}
                 autoHideDuration={6000}
                 onClose={handleCloseSnackBar}
-                message={result}
-            />
+            >
+                <Alert severity="success"> {result}</Alert>
+            </Snackbar>
         </Box>
     );
 }

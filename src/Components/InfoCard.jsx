@@ -13,6 +13,14 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import CategoryIcon from '@mui/icons-material/Category';
 import axiosInstance from '../axios';
+import _ from 'lodash'
+const BASE_URL = "http://173.249.60.28:60772";
+
+const trimImagePath = (imagePath) => {
+    if(!_.isEmpty(imagePath))
+        return _.replace(imagePath,"/var/netcore/hefz_quran_api/wwwroot",BASE_URL)
+    return imagePath
+}
 
 export default function InfoCard({ infoCardData }) {
     const theme = useTheme();
@@ -25,7 +33,7 @@ export default function InfoCard({ infoCardData }) {
                 <CardContent sx={{ paddingBottom: '10px!important', marginTop: '10px!important' }}>
                     <Grid container rowSpacing={1} columnSpacing={{ xs: 3 }} sx={{ textAlign: 'center' }}>
                         <Grid item xs={4}>
-                            <Avatar sx={{ minWidth: 80, minHeight: 80, m: '0 auto' }} alt="React" src={infoCardData.imagePath} />
+                            <Avatar sx={{ minWidth: 80, minHeight: 80, m: '0 auto' }} alt="React" src={trimImagePath(infoCardData.imagePath) || ""} />
                             <Rating sx={{ m: '0px auto', mt: 2 }} name="half-rating-read"  defaultValue={2} value={infoCardData.rating || 0} readOnly />
                         </Grid>
                         <Grid item xs={8} sx={{ textAlign: 'end' }}>

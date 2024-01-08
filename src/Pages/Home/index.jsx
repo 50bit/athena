@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material';
 import StatsCardComponent from '../../Components/StatsCard';
 import TopBar from "..//Global/TopBar";
 import axiosInstance from '../../axios';
+import _ from 'lodash';
 
 export default function Home() {
     const theme = useTheme();
@@ -26,7 +27,8 @@ export default function Home() {
                 imageAlt: "React",
                 prop: "workingTeacherRate"
             }
-        ]
+        ],
+        images:[]
     })
 
     const [studentData, setStudentData] = React.useState({
@@ -83,6 +85,8 @@ export default function Home() {
         const totalTeachers = data.length
         const tmpData = JSON.parse(JSON.stringify(teacherData))
         const workingTeacherChartIndex = teacherData.statsCharts.findIndex((td) => td.prop === "workingTeacherRate")
+        const images = _.map(data,(d)=>d.imagePath)
+        tmpData['images'] = images
         if (workingTeacherChartIndex >= 0) {
             tmpData.statsCharts[workingTeacherChartIndex].totalCount = totalTeachers
             tmpData.statsCharts[workingTeacherChartIndex].subCount = totalWorkingTeachers

@@ -10,22 +10,14 @@ import PortraitIcon from '@mui/icons-material/Portrait';
 import CategoryIcon from '@mui/icons-material/Category';
 import { Link as RouterLink } from 'react-router-dom';
 
-function refreshMessages() {
-  const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
-
-  return Array.from(new Array(50)).map(
-    () => messageExamples[getRandomInt(messageExamples.length)],
-  );
-}
 
 export default function BottomNav() {
   const [value, setValue] = React.useState(0);
   const ref = React.useRef(null);
-  const [messages, setMessages] = React.useState(() => refreshMessages());
+  const [messages, setMessages] = React.useState([]);
 
   React.useEffect(() => {
     ref.current.ownerDocument.body.scrollTop = 0;
-    setMessages(refreshMessages());
   }, [value, setMessages]);
 
   return (

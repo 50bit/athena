@@ -65,6 +65,12 @@ export default function BarChartComponent({ data }) {
         }
     })
 
+    _.forEach(monthHashmap,(value)=>{
+        const monthTotal = value.male + value.female
+        value.male = Math.round((value.male / monthTotal) * 100)
+        value.female = Math.round((value.female / monthTotal) * 100)
+    })
+
     let maleStudentData = [];
     let femaleStudentData = [];
     _.forEach(monthHashmap, (value, key) => {

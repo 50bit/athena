@@ -12,6 +12,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import _ from 'lodash';
+const BASE_URL = "http://173.249.60.28:60772";
 
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, colors }) => ({
@@ -30,18 +32,50 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme, colors }) => ({
 }));
 
 const StyledAvatarGroup = styled('div')(({ theme, colors }) => ({
-    '.MuiAvatar-root':{
-        fontSize:'12px',
-        alignItems:'center'
+    '.MuiAvatar-root': {
+        fontSize: '12px',
+        alignItems: 'center'
     }
 }));
+
+const trimImagePath = (imagePath) => {
+    if (!_.isEmpty(imagePath))
+        return _.replace(imagePath, "/var/netcore/hefz_quran_api/wwwroot", BASE_URL)
+    return imagePath
+}
+
+
+const getAvatarUi = (data) => {
+    if (data.images && data.images.length === data.statsCharts[0]?.totalCount)
+        return (
+            <Grid container >
+                <StyledAvatarGroup>
+                    <AvatarGroup max={5}>
+                        {data.images.map((item, index) => (
+                            <Avatar key={index} alt="React" src={trimImagePath(item)} />
+                        ))}
+                    </AvatarGroup>
+                </StyledAvatarGroup>
+            </Grid>
+        )
+
+    else return (
+        <Grid container >
+            <StyledAvatarGroup>
+                <AvatarGroup max={5}>
+                    {[...Array(data.statsCharts[0]?.totalCount || 0)].map((item, index) => (
+                        <Avatar key={index} alt="React" src="../../public/logo192.png" />
+                    ))}
+                </AvatarGroup>
+            </StyledAvatarGroup>
+        </Grid>
+    )
+}
 
 export default function StatsCardComponent({ data }) {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
-
-
 
     const normalise = (value, min, max) => ((value - min) * 100) / (max - min);
 
@@ -60,18 +94,10 @@ export default function StatsCardComponent({ data }) {
                         </Grid>
                     </Grid>
 
-                    <Grid container >
-                        <StyledAvatarGroup>
-                            <AvatarGroup max={4}>
-                                {[...Array(data.statsCharts[0]?.totalCount || 0)].map((item,index) => (
-                                    <Avatar key={index} alt="React" src="../../public/logo192.png" />
-                                ))}
-                            </AvatarGroup>
-                        </StyledAvatarGroup>
-                    </Grid>
+                    {getAvatarUi(data)}
 
                     <Grid container sx={{ mt: 2 }}>
-                        {data.statsCharts.map((item,index) => (
+                        {data.statsCharts.map((item, index) => (
                             <Grid key={index} item sx={{ mt: 2 }} xs={12}>
                                 <Grid container>
                                     <Grid item xs={6}>

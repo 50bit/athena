@@ -29,6 +29,8 @@ import './style.css';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
 import axiosInstance from '../../axios';
+import { saveAs } from 'file-saver';
+const BASE_URL = "http://173.249.60.28:60772";
 
 function createData(id, requiredPaymentDate, paymentDate, paymentStatus) {
     return { id, requiredPaymentDate, paymentDate, paymentStatus };
@@ -92,7 +94,7 @@ export default function UserInfo() {
     }
 
     const [comments, setComments] = React.useState([])
-
+    const [ejazat, setEjazat] = React.useState([])
     const getComments = async () => {
         let result = []
         if (userData.roleId == 3) {
@@ -107,9 +109,22 @@ export default function UserInfo() {
         }
         setComments(result)
     }
+    const getEjazat = async () => {
+        const {data} =  await axiosInstance.get(`/users/ejazat/${userData.uId}`)
+        // const { data } = await axiosInstance.get(`/users/ejazat/d860e743-a80e-491c-83c2-1a646889b4c5`)
+        setEjazat(data)
+    }
     React.useEffect(() => {
         getComments()
+        getEjazat()
     }, [])
+
+    const downloadImage = (path) => {
+        if (path) {
+            const name = path.split("/").slice(-1)
+            saveAs(path, name)
+        }
+    }
 
     return (
         <Box sx={{ mt: 10, mb: 2 }}>
@@ -191,26 +206,22 @@ export default function UserInfo() {
                 الإجازات
             </Typography>
             <Stack direction="column" sx={{ m: "15px" }} spacing={2}>
-                <Grid container>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" sx={{ pr: 1, color: colors.primary[500], float: 'right' }}>
-                            إجازة 1
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} >
-                        <FileDownloadOutlinedIcon sx={{ float: 'left', color: colors.primary[500] }} />
-                    </Grid>
-                </Grid>
-                <Grid container>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" sx={{ pr: 1, color: colors.primary[500], float: 'right' }}>
-                            إجازة 2
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} >
-                        <FileDownloadOutlinedIcon sx={{ float: 'left', color: colors.primary[500] }} />
-                    </Grid>
-                </Grid>
+                {
+                    (ejazat.map((ejaza,index) => {
+                        return (
+                            <Grid container onClick={(e) => { downloadImage(`${BASE_URL}${ejaza.filePath}`) }} sx={{ cursor: 'pointer' }}>
+                                <Grid item xs={6}>
+                                    <Typography variant="body1" sx={{ pr: 1, color: colors.primary[500], float: 'right' }}>
+                                        إجازة {index + 1}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={6} >
+                                    <FileDownloadOutlinedIcon sx={{ float: 'left', color: colors.primary[500] }} />
+                                </Grid>
+                            </Grid>
+                        )
+                    }))
+                }
             </Stack>
             <Divider variant="middle" sx={{ mt: 3, mb: 3 }} />
             <Typography variant="h4" sx={{ pr: 2, color: colors.primary[500], fontWeight: 'bold' }}>

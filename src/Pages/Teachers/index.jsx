@@ -56,7 +56,8 @@ export default function Teachers() {
                 imageAlt: "React",
                 prop: "workingTeacherRate"
             }
-        ]
+        ],
+        images:[]
     })
 
 
@@ -66,6 +67,8 @@ export default function Teachers() {
         const totalWorkingTeachers = data.filter((d) => d.getPaid == true).length
         const totalTeachers = data.length
         const tmpData = JSON.parse(JSON.stringify(teacherGraphData))
+        const images = _.map(data,(d)=>d.imagePath)
+        tmpData['images'] = images
         const workingTeacherChartIndex = teacherGraphData.statsCharts.findIndex((td) => td.prop === "workingTeacherRate")
         if (workingTeacherChartIndex >= 0) {
             tmpData.statsCharts[workingTeacherChartIndex].totalCount = totalTeachers
