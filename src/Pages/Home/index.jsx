@@ -13,6 +13,9 @@ export default function Home() {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
+    const [allStudents,setAllStudents] = React.useState([]);
+    const [allTeachers,setAllTeachers] = React.useState([]);
+
     const [teacherData, setTeacherData] = React.useState({
         title: "الشيوخ",
         buttonTitle: "رؤية الكل",
@@ -61,6 +64,7 @@ export default function Home() {
 
     const getStudentData = async () => {
         const { data } = await axiosInstance.get('/users/get_all_students')
+        setAllStudents(data)
         const totalabsent = data.filter((d) => d.normalUser?.numberPerWeek >= 1).length
         const totalStudentsInSessions = (await axiosInstance.get('/sessions/sessions_students')).data?.length
         const totalStudents = data.length
@@ -81,6 +85,7 @@ export default function Home() {
 
     const getTeacherData = async () => {
         const { data } = await axiosInstance.get('/users/get_mohafez_users')
+        setAllTeachers(data)
         const totalWorkingTeachers = data.filter((d) => d.myEjazaEnum == 1).length
         const totalTeachers = data.length
         const tmpData = JSON.parse(JSON.stringify(teacherData))
@@ -108,7 +113,7 @@ export default function Home() {
 
     return (
         <Box sx={{ mt: 10, mb: 2 }}>
-            <TopBar data={[]} />
+            <TopBar data={[...allStudents,...allTeachers]} />
 
             <Typography variant="h4" sx={{ pr: 1, color: colors.primary[500], fontWeight: 'bold' }}>
                 الطلاب الجدد

@@ -45,9 +45,9 @@ export default function Complaints() {
                 <Table sx={{ minWidth: '100%' }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>اسم و رقم الطالب</TableCell>
-                            <TableCell align="right">تاريخ الإقتراح أو الشكوى</TableCell>
-                            <TableCell align="right">الإقتراح او الشكوى</TableCell>
+                            <TableCell sx={{color:colors.primary[500]}}>اسم و رقم الطالب</TableCell>
+                            <TableCell align="right" sx={{color:colors.primary[500]}}>تاريخ الإقتراح أو الشكوى</TableCell>
+                            <TableCell align="right" sx={{color:colors.primary[500]}}>الإقتراح او الشكوى</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -56,11 +56,11 @@ export default function Complaints() {
                                 key={row.name}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell component="th" scope="row">
+                                <TableCell component="th" scope="row" sx={{color:colors.primary[500]}}>
                                     {row.id}
                                 </TableCell>
-                                <TableCell align="right">{row.date}</TableCell>
-                                <TableCell align="right">{row.complaints}</TableCell>
+                                <TableCell align="right" sx={{color:colors.primary[500]}}>{row.date}</TableCell>
+                                <TableCell align="right" sx={{color:colors.primary[500]}}>{row.complaints}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

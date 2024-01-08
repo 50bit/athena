@@ -37,7 +37,7 @@ export default function Teachers() {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
-
+    const [allTeachers, setAllTeachers] = React.useState([])
     const [teacherData, setTeacherData] = React.useState([])
     const [filteredTeacherData, setFilteredTeacherData] = React.useState([])
     const [selectedItems, setSelectedItems] = React.useState([]);
@@ -63,7 +63,8 @@ export default function Teachers() {
 
 
     const getTeacherData = async () => {
-        const { data } = await axiosInstance.get('/users/get_mohafez_users')
+        const { data } = await axiosInstance.get('/users/get_mohafez_users');
+        setAllTeachers(data)
         const totalWorkingTeachers = data.filter((d) => d.getPaid == true).length
         const totalTeachers = data.length
         const tmpData = JSON.parse(JSON.stringify(teacherGraphData))
@@ -147,7 +148,7 @@ export default function Teachers() {
     }
     return (
         <Box sx={{ mt: 10, mb: 2 }}>
-            <TopBar data={[teacherData]} />
+            <TopBar data={allTeachers} />
             <StatsCardComponent data={teacherGraphData} />
             <Divider variant="middle" sx={{ mt: 3, mb: 3 }} />
             <Grid container rowSpacing={1} pl={2} pr={2} alignItems={'center'}>

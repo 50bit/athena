@@ -4,12 +4,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
-import HomeIcon from '@mui/icons-material/Home';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import PortraitIcon from '@mui/icons-material/Portrait';
 import CategoryIcon from '@mui/icons-material/Category';
 import { Link as RouterLink } from 'react-router-dom';
-
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import './style.css';
 
 export default function BottomNav() {
   const [value, setValue] = React.useState(0);
@@ -31,10 +32,11 @@ export default function BottomNav() {
             setValue(newValue);
           }}
         >
-          <BottomNavigationAction label="الرئيسية" icon={<HomeIcon />} component={RouterLink} to="/" />
+          <BottomNavigationAction label="الرئيسية" icon={<HomeOutlinedIcon />} component={RouterLink} to="/" />
           <BottomNavigationAction label="الطلاب" icon={<PersonIcon />} component={RouterLink} to="/students" />
           <BottomNavigationAction label="الشيوخ" icon={<PortraitIcon />} component={RouterLink} to="/teachers" />
           <BottomNavigationAction label="الأنشطة" icon={<CategoryIcon />} component={RouterLink} to="/activities" />
+          <BottomNavigationAction label="المقترحات" icon={<ArticleOutlinedIcon />} component={RouterLink} to="/complaints" />
         </BottomNavigation>
       </Paper>
     </Box>

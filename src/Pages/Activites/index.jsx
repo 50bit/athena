@@ -40,6 +40,7 @@ export default function Activites() {
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
     const [currentAggregation, setCurrentAggregation] = React.useState(1)
+    const [allStudents, setAllStudents] = React.useState([])
     const [studentData, setStudentData] = React.useState([])
     const [filteredStudentData, setFilteredStudentData] = React.useState([])
     const [selectedItems, setSelectedItems] = React.useState([]);
@@ -55,6 +56,7 @@ export default function Activites() {
 
     const getStudentData = async () => {
         const { data } = await axiosInstance.get('/users/get_all_students');
+        setAllStudents(data)
         const sessionStudents = (await axiosInstance.get('/sessions/sessions_students')).data
         _.forEach(data, (sd) => {
             const sessionStudent = _.find(sessionStudents, (ss) => ss.student?.id === sd.id)
@@ -172,7 +174,7 @@ export default function Activites() {
     }
     return (
         <Box sx={{ mt: 10, mb: 2 }}>
-            <TopBar data={studentData} />
+            <TopBar data={allStudents} />
             <Grid container columnSpacing={2} mb={4} mt={4} alignItems="center" justifyContent="center">
                 <Grid item xs={4}>
                     <Button

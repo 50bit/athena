@@ -12,6 +12,13 @@ import { ColorModeContext, tokens } from '../../theme';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useTheme } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import './style.css';
+import Avatar from '@mui/material/Avatar';
+import _ from 'lodash';
+import Rating from '@mui/material/Rating';
+import { useNavigate } from 'react-router-dom';
+
+const BASE_URL = "http://173.249.60.28:60772";
 
 const Search = styled('div')(({ theme, colors }) => ({
     position: 'relative',
@@ -59,10 +66,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function TopBar({data}) {
+const trimImagePath = (imagePath) => {
+    if (!_.isEmpty(imagePath))
+        return _.replace(imagePath, "/var/netcore/hefz_quran_api/wwwroot", BASE_URL)
+    return imagePath
+};
+
+
+export default function TopBar({ data }) {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
+    const navigate = useNavigate();
+
+    const [showDropDown, setShowDropDown] = React.useState(false)
+    const [componentData, setComponentData] = React.useState(data)
+    const searchData = (e) => {
+        if (_.isEmpty(e.target.value)) setComponentData(data)
+        setComponentData(_.filter(data, (d) => _.includes(_.lowerCase(d.name), _.lowerCase(e.target.value))))
+    }
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar sx={{ bgcolor: colors.primary[400] }} position="fixed">
@@ -71,16 +93,54 @@ export default function TopBar({data}) {
                         size="large"
                         edge="end"
                     >
-                        <KeyboardArrowRightIcon sx={{color: colors.primary[500] }} />
+                        <KeyboardArrowRightIcon sx={{ color: colors.primary[500] }} />
                     </IconButton>
                     <Search colors={colors}>
                         <SearchIconWrapper>
-                            <SearchIcon sx={{color: colors.primary[500] }} />
+                            <SearchIcon sx={{ color: colors.primary[500] }} />
                         </SearchIconWrapper>
                         <StyledInputBase
                             placeholder="ابحث عن شيخ أو طالب .."
                             inputProps={{ 'aria-label': 'search' }}
+                            onFocus={(e) => { setShowDropDown(true); setComponentData(data); searchData(e) }}
+                            onBlur={() => { setTimeout(() => { setShowDropDown(false); setComponentData(data) }, 200)}}
+                            onKeyUp={(e) => searchData(e)}
                         />
+                        {
+                            (
+                                showDropDown &&
+                                <div className='dropDownSearchMenu'>
+                                    <ul>
+                                        {(
+                                            componentData.map((d) => {
+                                                return (
+                                                    <li onClick={() => {
+                                                        navigate('/user', {
+                                                            state: d
+                                                        })
+                                                    }}>
+                                                        <div className='dropDownSearchItems'>
+                                                            <div className='dropDownImage'>
+                                                                <Avatar sx={{ minWidth: 20, minHeight: 2 }} alt="React" src={trimImagePath(d.imagePath) || ""} />
+                                                            </div>
+                                                            <div className='dropDownText'>
+                                                                <div>
+                                                                    <span>{d.roleId === 2 ? "الشيخ" : "الطالب"} : </span>{d.name}
+                                                                </div>
+                                                                <div>
+                                                                    <Rating sx={{ float: 'right' }} name="half-rating-read" defaultValue={2} value={d.rating} readOnly />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                )
+                                            })
+                                        )}
+
+                                    </ul>
+                                </div>
+                            )
+                        }
                     </Search>
                     <IconButton
                         size="large"
@@ -89,7 +149,7 @@ export default function TopBar({data}) {
                         sx={{ mr: 'auto' }}
                         component={RouterLink} to="/notifications"
                     >
-                        <NotificationsIcon sx={{color: colors.primary[500] }} />
+                        <NotificationsIcon sx={{ color: colors.primary[500] }} />
                     </IconButton>
                 </Toolbar>
             </AppBar>

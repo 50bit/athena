@@ -38,6 +38,7 @@ export default function Students() {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
+    const [allStudents, setAllStudents] = React.useState([])
     const [studentData, setStudentData] = React.useState([])
     const [filteredStudentData, setFilteredStudentData] = React.useState([])
     const [selectedItems, setSelectedItems] = React.useState([]);
@@ -71,6 +72,7 @@ export default function Students() {
 
     const getStudentData = async () => {
         const { data } = await axiosInstance.get('/users/get_all_students');
+        setAllStudents(data)
         const sessionStudents = (await axiosInstance.get('/sessions/sessions_students')).data
         _.forEach(data, (sd) => {
             const sessionStudent = _.find(sessionStudents, (ss) => ss.student?.id === sd.id)
@@ -158,7 +160,7 @@ export default function Students() {
     }
     return (
         <Box sx={{ mt: 10, mb: 2 }}>
-            <TopBar data={[studentData]} />
+            <TopBar data={allStudents} />
             <StatsCardComponent data={studentGraphData} />
             <Divider variant="middle" sx={{ mt: 3, mb: 3 }} />
             <Grid container rowSpacing={1} pl={2} pr={2} alignItems={'center'}>

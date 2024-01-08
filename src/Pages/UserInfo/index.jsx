@@ -69,7 +69,7 @@ export default function UserInfo() {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = React.useContext(ColorModeContext);
-
+    const [roleId, setRoleId] = React.useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -110,13 +110,14 @@ export default function UserInfo() {
         setComments(result)
     }
     const getEjazat = async () => {
-        const {data} =  await axiosInstance.get(`/users/ejazat/${userData.uId}`)
+        const { data } = await axiosInstance.get(`/users/ejazat/${userData.uId}`)
         // const { data } = await axiosInstance.get(`/users/ejazat/d860e743-a80e-491c-83c2-1a646889b4c5`)
         setEjazat(data)
     }
     React.useEffect(() => {
         getComments()
         getEjazat()
+        setRoleId(localStorage.getItem("roleId") || null)
     }, [])
 
     const downloadImage = (path) => {
@@ -207,7 +208,7 @@ export default function UserInfo() {
             </Typography>
             <Stack direction="column" sx={{ m: "15px" }} spacing={2}>
                 {
-                    (ejazat.map((ejaza,index) => {
+                    (ejazat.map((ejaza, index) => {
                         return (
                             <Grid container onClick={(e) => { downloadImage(`${BASE_URL}${ejaza.filePath}`) }} sx={{ cursor: 'pointer' }}>
                                 <Grid item xs={6}>
@@ -223,105 +224,110 @@ export default function UserInfo() {
                     }))
                 }
             </Stack>
-            <Divider variant="middle" sx={{ mt: 3, mb: 3 }} />
-            <Typography variant="h4" sx={{ pr: 2, color: colors.primary[500], fontWeight: 'bold' }}>
-                رقم الحساب
-            </Typography>
-            <StyledPaymentPaper colors={colors}>
-                <Stack direction="column" sx={{ m: "15px" }} spacing={2}>
-                    <Typography variant="h6" sx={{ pr: 1, color: colors.primary[900], float: 'right' }}>
-                        رقم البطاقة
-                    </Typography>
-                    <Typography variant="h2" sx={{ pr: 1, color: colors.primary[900], fontWeight: 'bold', float: 'right', textAlign: 'center' }}>
-                        51547922289112378
-                    </Typography>
-                    <Typography variant="h6" sx={{ pr: 1, color: colors.primary[900], float: 'right' }}>
-                        تاريخ الانتهاء
-                    </Typography>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <Typography variant="h2" sx={{ pr: 1, color: colors.primary[900], fontWeight: 'bold', float: 'right' }}>
-                                12/24
-                            </Typography>
+            {((roleId && roleId == 1) && <>
+                <Divider variant="middle" sx={{ mt: 3, mb: 3 }} />
+                <Typography variant="h4" sx={{ pr: 2, color: colors.primary[500], fontWeight: 'bold' }}>
+                    رقم الحساب
+                </Typography>
+                <StyledPaymentPaper colors={colors}>
+                    <Stack direction="column" sx={{ m: "15px" }} spacing={2}>
+                        <Typography variant="h6" sx={{ pr: 1, color: colors.primary[900], float: 'right' }}>
+                            رقم البطاقة
+                        </Typography>
+                        <Typography variant="h2" sx={{ pr: 1, color: colors.primary[900], fontWeight: 'bold', float: 'right', textAlign: 'center' }}>
+                            51547922289112378
+                        </Typography>
+                        <Typography variant="h6" sx={{ pr: 1, color: colors.primary[900], float: 'right' }}>
+                            تاريخ الانتهاء
+                        </Typography>
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <Typography variant="h2" sx={{ pr: 1, color: colors.primary[900], fontWeight: 'bold', float: 'right' }}>
+                                    12/24
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6} >
+                                <Typography variant="h4" sx={{ color: colors.orangeAccent[100], float: 'left', pr: 1 }}>
+                                    موثقة
+                                </Typography>
+                                <BeenhereOutlinedIcon sx={{ float: 'left', color: colors.orangeAccent[100] }} />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={6} >
-                            <Typography variant="h4" sx={{ color: colors.orangeAccent[100], float: 'left', pr: 1 }}>
-                                موثقة
-                            </Typography>
-                            <BeenhereOutlinedIcon sx={{ float: 'left', color: colors.orangeAccent[100] }} />
-                        </Grid>
+                    </Stack>
+                </StyledPaymentPaper>
+            </>)}
+
+            {((roleId && roleId == 1) && <>
+                <Divider variant="middle" sx={{ mt: 3, mb: 3 }} />
+                <Grid container>
+                    <Grid item xs={6} sx={{ alignItems: 'baseline' }}>
+                        <Typography variant="h4" sx={{ pr: 2, color: colors.primary[500], fontWeight: 'bold', float: 'right' }}>
+                            سجل الدفعات
+                        </Typography>
                     </Grid>
-                </Stack>
-            </StyledPaymentPaper>
-            <Divider variant="middle" sx={{ mt: 3, mb: 3 }} />
-            <Grid container>
-                <Grid item xs={6} sx={{ alignItems: 'baseline' }}>
-                    <Typography variant="h4" sx={{ pr: 2, color: colors.primary[500], fontWeight: 'bold', float: 'right' }}>
-                        سجل الدفعات
-                    </Typography>
+                    <Grid item xs={6} >
+                        <Button
+                            id="aggregation-button"
+                            aria-controls={open ? 'aggregation-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
+                            variant="outlined"
+                            disableElevation
+                            onClick={handleClick}
+                            startIcon={<KeyboardArrowDownIcon sx={{ m: 0, alignItems: 'center', p: 0, mt: "-4px" }} />}
+                            sx={{ ml: 2, float: 'left', color: colors.primary[500], border: 'none' }}
+                        >
+                            اخر 3 شهور
+                        </Button>
+                        <Menu
+                            id="aggregation-menu"
+                            MenuListProps={{
+                                'aria-labelledby': 'aggregation-button',
+                            }}
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            colors={colors}
+                        >
+                            <MenuItem onClick={handleClose} sx={{ minWidth: 180 }} >
+                                <Typography variant="body2" sx={{ color: colors.primary[500] }}>
+                                    اخر 3 شهور
+                                </Typography>
+                            </MenuItem>
+                        </Menu>
+                    </Grid>
                 </Grid>
-                <Grid item xs={6} >
-                    <Button
-                        id="aggregation-button"
-                        aria-controls={open ? 'aggregation-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        variant="outlined"
-                        disableElevation
-                        onClick={handleClick}
-                        startIcon={<KeyboardArrowDownIcon sx={{ m: 0, alignItems: 'center', p: 0, mt: "-4px" }} />}
-                        sx={{ ml: 2, float: 'left', color: colors.primary[500], border: 'none' }}
-                    >
-                        اخر 3 شهور
-                    </Button>
-                    <Menu
-                        id="aggregation-menu"
-                        MenuListProps={{
-                            'aria-labelledby': 'aggregation-button',
-                        }}
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        colors={colors}
-                    >
-                        <MenuItem onClick={handleClose} sx={{ minWidth: 180 }} >
-                            <Typography variant="body2" sx={{ color: colors.primary[500] }}>
-                                اخر 3 شهور
-                            </Typography>
-                        </MenuItem>
-                    </Menu>
-                </Grid>
-            </Grid>
-            <TableContainer sx={{ boxShadow: 'none', backgroundColor: 'none' }} component={Paper}>
-                <Table sx={{ minWidth: '100%' }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="right" sx={{ color: colors.primary[500] }}>رقم الطالب</TableCell>
-                            <TableCell align="right" sx={{ color: colors.primary[500] }}>تاريخ الدفع المستحق</TableCell>
-                            <TableCell align="right" sx={{ color: colors.primary[500] }}>تاريخ الدفع</TableCell>
-                            <TableCell align="right" sx={{ color: colors.primary[500] }}>حالة الدفع</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row) => (
-                            <TableRow
-                                key={row.name}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell align="right" sx={{ color: colors.primary[500] }} component="th" scope="row">
-                                    {row.id}
-                                </TableCell>
-                                <TableCell align="right" sx={{ color: colors.primary[500] }}>{row.requiredPaymentDate}</TableCell>
-                                <TableCell align="right" sx={{ color: colors.primary[500] }}>{row.paymentDate}</TableCell>
-                                <TableCell align="center" sx={{ textAlign: 'center!important', alignItems: 'center', display: 'flex', color: colors.primary[500] }}>
-                                    <FiberManualRecordIcon sx={{ color: (row.paymentStatus == 'تم الدفع' ? colors.greenAccent[400] : colors.orangeAccent[100]) }} />
-                                    {row.paymentStatus}
-                                </TableCell>
+                <TableContainer sx={{ boxShadow: 'none', backgroundColor: 'none' }} component={Paper}>
+                    <Table sx={{ minWidth: '100%' }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="right" sx={{ color: colors.primary[500] }}>رقم الطالب</TableCell>
+                                <TableCell align="right" sx={{ color: colors.primary[500] }}>تاريخ الدفع المستحق</TableCell>
+                                <TableCell align="right" sx={{ color: colors.primary[500] }}>تاريخ الدفع</TableCell>
+                                <TableCell align="right" sx={{ color: colors.primary[500] }}>حالة الدفع</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {rows.map((row) => (
+                                <TableRow
+                                    key={row.name}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell align="right" sx={{ color: colors.primary[500] }} component="th" scope="row">
+                                        {row.id}
+                                    </TableCell>
+                                    <TableCell align="right" sx={{ color: colors.primary[500] }}>{row.requiredPaymentDate}</TableCell>
+                                    <TableCell align="right" sx={{ color: colors.primary[500] }}>{row.paymentDate}</TableCell>
+                                    <TableCell align="center" sx={{ textAlign: 'center!important', alignItems: 'center', display: 'flex', color: colors.primary[500] }}>
+                                        <FiberManualRecordIcon sx={{ color: (row.paymentStatus == 'تم الدفع' ? colors.greenAccent[400] : colors.orangeAccent[100]) }} />
+                                        {row.paymentStatus}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </>)}
             <Divider variant="middle" sx={{ mt: 3, mb: 3 }} />
             <Typography variant="h4" sx={{ pr: 2, color: colors.primary[500], fontWeight: 'bold' }}>
                 الملاحظات

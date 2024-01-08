@@ -3,4 +3,5 @@ tbody tr:nth-of-type(odd) {
 }
 th, td {
     border-bottom: none!important;
+    padding: 10px!important;
 }
